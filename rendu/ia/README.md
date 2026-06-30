@@ -41,6 +41,7 @@ J'ai aussi ajouté une ligne dans le `SYSTEM` prompt interdisant explicitement l
 ### 1.4 Préparation du fine-tuning médical (Mission Expérimentale)
 
 Script prêt à l'emploi : **[`scripts/train_medical_model.py`](../../scripts/train_medical_model.py)**, adapté de `train_finance_model.py`, avec :
+Notebook Colab autonome prêt à l'emploi : **[`rendu/ia/medical_finetuning_colab.ipynb`](medical_finetuning_colab.ipynb)** (à ouvrir directement dans Google Colab Pro, runtime GPU). Il embarque une copie synchronisée du script, gère l'upload du dataset, lance l'entraînement, trace la courbe de loss et sauvegarde l'adapter sur Drive.
 - Base recommandée : `microsoft/Phi-3.5-mini-instruct`.
 - Garde-fou automatique : le script **refuse de lancer l'entraînement** si le pattern de backdoor (`P0UP33`) est détecté dans le dataset fourni.
 - Logger de métriques (loss/epoch) exporté en JSON pour le rapport final.
