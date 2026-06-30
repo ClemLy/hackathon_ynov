@@ -308,7 +308,52 @@ curl -X POST http://localhost:11434/api/generate \
 
 ---
 
-## 8. Stack technique complète
+## 8. Preuves d'exécution
+
+### Cluster Kubernetes — nœuds actifs
+
+```
+$ kubectl get nodes -o wide
+NAME         STATUS   ROLES           AGE   VERSION        INTERNAL-IP
+fast-heron   Ready    <none>          64d   v1.36.1+k3s1   10.0.0.7
+fast-skunk   Ready    <none>          64d   v1.36.1+k3s1   10.0.0.4
+set-hog      Ready    control-plane   64d   v1.36.1+k3s1   10.0.0.2
+```
+
+### Pods en production — namespace `ai`
+
+```
+$ kubectl get pods -n ai -o wide
+NAME                      READY   STATUS    RESTARTS   AGE     NODE
+ollama-6d98d5bcd6-5v426   1/1     Running   0          3h16m   fast-heron
+open-webui-0              1/1     Running   0          146m    fast-skunk
+```
+
+### Modèles disponibles dans Ollama
+
+```
+$ kubectl exec -n ai deploy/ollama -- ollama list
+NAME                     ID              SIZE      MODIFIED
+phi3-financial:latest    6109eeca3631    2.2 GB    3 hours ago
+phi3.5:latest            61819fb370a3    2.2 GB    3 hours ago
+llama3.2:3b              a80c4f17acd5    2.0 GB    5 days ago
+```
+
+### Test d'inférence en production
+
+```
+$ ollama run phi3-financial "En une phrase, qu'est-ce que le ratio P/E ?"
+
+Le ratio P/E (Price to Earnings) mesure le prix d'une action divisé par
+son bénéfice par action pour évaluer la valeur relative et l'investissement
+potentiel dans une entreprise.
+```
+
+**Temps de réponse :** < 30s sur CPU (pas de GPU)
+
+---
+
+## 9. Stack technique complète
 
 | Composant | Technologie | Version |
 |---|---|---|
@@ -325,7 +370,7 @@ curl -X POST http://localhost:11434/api/generate \
 
 ---
 
-## 9. Repo hackathon
+## 10. Repo hackathon
 
 Le repo forké est disponible à :
 **https://github.com/andrelair-platform/hackathon_ynov**

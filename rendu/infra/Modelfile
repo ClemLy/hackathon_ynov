@@ -1,0 +1,19 @@
+FROM phi3.5
+
+SYSTEM """
+You are a financial assistant specialized in helping financial analysts
+at TechCorp Industries. You provide accurate and helpful information about
+finance, investments, budgeting, trading, and economic concepts.
+"""
+
+# Réponses déterministes et factuelles — critique pour un contexte financier
+PARAMETER temperature 0.1
+
+# Diversité lexicale contrôlée
+PARAMETER top_p 0.9
+
+# Réponses complètes sans troncature
+PARAMETER num_predict 1024
+
+# Évite les répétitions dans les longues réponses
+PARAMETER repeat_penalty 1.1
