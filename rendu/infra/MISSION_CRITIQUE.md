@@ -67,7 +67,23 @@ Authentik SSO (auth.devandre.sbs) — authentification OIDC
 
 Notre infrastructure est **CPU-only** — aucun GPU n'est disponible sur les nœuds. Triton est optimisé pour les déploiements GPU avec TensorRT. Ollama avec quantification **GGUF Q4_0** est la solution adaptée pour une inférence CPU performante.
 
-> **Note sur le repo hackathon :** Le répertoire `models/phi3_financial/` contient des fichiers LoRA (adapter_model.safetensors) — ce sont des **delta de poids** non utilisables directement par Ollama. La bonne approche est le fichier `ollama_server/Modelfile` qui définit le comportement du modèle via un SYSTEM prompt sur la base `phi3.5`.
+> **Pourquoi `models/phi3_financial/` n'a pas été utilisé ?**
+>
+> Deux raisons cumulées :
+>
+> **1. Les fichiers sont des pointeurs Git LFS vides**
+> `adapter_model.safetensors` fait 133 octets — c'est un pointeur LFS, pas le vrai fichier. Les poids réels ne sont pas présents dans le repo sans accès au serveur LFS.
+>
+> **2. Un adapter LoRA n'est pas un modèle standalone**
+> Même avec les vrais fichiers, Ollama ne peut pas les charger directement. Un adapter LoRA est un *delta de poids* qui s'applique par-dessus un modèle de base. La chaîne complète serait :
+> ```
+> adapter_model.safetensors (LoRA)
+>     + phi3.5 complet (~7 GB, non fourni)
+>     → fusion via peft.merge_and_unload()   # requiert Python + GPU
+>     → conversion GGUF via llama.cpp
+>     → chargement dans Ollama
+> ```
+> Cette chaîne est celle de la **Mission Expérimentale** (fine-tuning sur Google Colab). Pour la Mission Critique production, on utilise l'approche `ollama_server/Modelfile` du même repo : `FROM phi3.5` + SYSTEM prompt financier — plus rapide, stable, et suffisant pour un assistant métier.
 
 ---
 
