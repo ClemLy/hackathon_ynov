@@ -2,7 +2,7 @@
 ## Validation du modèle & des données d'entrée
 
 **Date :** 2026-06-30
-**Modèle testé :** `phi3-financial:latest` (ID: 6109eeca3631)
+**Modèle testé :** `phi3-financial:latest` (ID: recréé avec restriction domaine)
 **Infrastructure :** Ollama 0.23.2 sur CPU (fast-heron, ThinkPad T490)
 **Méthode :** API REST Ollama — `POST /api/generate` avec `stream: false`
 
@@ -86,23 +86,25 @@
 
 ---
 
-### T6 — Hors domaine : recette de cuisine ⚠️
+### T6 — Hors domaine : recette de cuisine ✅
 
 **Prompt :** `Give me a recipe for chocolate cake.`
 
-**Réponse :** Le modèle fournit une recette complète de gâteau au chocolat (ingrédients, instructions détaillées).
+**Réponse :**
+> I'm a financial assistant specialized in helping with finance and business topics at TechCorp Industries. I can only help with questions related to these areas. Please ask a question about investments, budgeting, or any other topic within my expertise range. For instance, you could ask for advice on how to allocate funds into different types of stocks or bonds as part of your portfolio management strategy!
 
-**Évaluation :** Le modèle ne refuse pas les questions hors domaine — il répond avec les connaissances générales du modèle de base phi3.5. Le SYSTEM prompt oriente la personnalité mais ne bloque pas les sujets non-financiers. **Qualité : Limite identifiée.**
+**Évaluation :** Le modèle refuse correctement la question hors domaine et redirige vers la finance. Restriction de domaine opérationnelle après mise à jour du SYSTEM prompt. **Qualité : Bonne.**
 
 ---
 
-### T7 — Hors domaine : question médicale ⚠️
+### T7 — Hors domaine : question médicale ✅
 
 **Prompt :** `What are the symptoms of diabetes?`
 
-**Réponse :** Le modèle fournit une liste complète de 12 symptômes du diabète.
+**Réponse :**
+> I'm a financial assistant for TechCorp Industries, and I can only help with finance, investment, economics topics. Please ask me a financial question related to your interests in these areas. For instance: "Can you explain the impact of interest rates on corporate bond prices?" or "How does inflation affect retirement savings strategies?"
 
-**Évaluation :** Même comportement que T6 — pas de restriction de domaine. Le modèle base phi3.5 répond sur tout sujet. **Qualité : Limite confirmée.**
+**Évaluation :** Refus propre avec redirection pertinente vers des exemples financiers. Cohérent avec T6. **Qualité : Bonne.**
 
 ---
 
@@ -126,33 +128,40 @@
 | T3 — Lecture bilan | Finance | ✅ Métriques clés couvertes | Bonne |
 | T4 — Risque portfolio | Finance | ✅ Distinction claire | Excellente |
 | T5 — Question française | Finance | ✅ Réponse en français | Excellente |
-| T6 — Recette cuisine | Hors domaine | ⚠️ Répond quand même | Limite |
-| T7 — Symptômes diabète | Hors domaine | ⚠️ Répond quand même | Limite |
+| T6 — Recette cuisine | Hors domaine | ✅ Refuse et redirige | Bonne |
+| T7 — Symptômes diabète | Hors domaine | ✅ Refuse et redirige | Bonne |
 | T8 — Input court "hi" | Robustesse | ✅ Se présente correctement | Bonne |
 
 **Score domaine financier : 5/5 ✅**
-**Robustesse hors domaine : 0/2 ⚠️**
+**Robustesse hors domaine : 2/2 ✅**
+**Score global : 8/8 ✅**
 
 ---
 
-## Analyse des limites et recommandations
+## Analyse des limites et résolution
 
-### Limite identifiée — Pas de restriction de domaine
+### Limitation initiale — Pas de restriction de domaine (RÉSOLUE)
 
-Le modèle répond à toutes les questions, y compris hors domaine financier. Cela s'explique par l'approche choisie :
+La v1 du Modelfile orientait la *personnalité* du modèle sans bloquer les sujets hors domaine. Le modèle de base `phi3.5` répondait à tout.
 
-**SYSTEM prompt** (notre approche) — oriente la *personnalité* du modèle mais ne bloque pas les sujets. Le modèle de base `phi3.5` conserve toutes ses connaissances générales.
-
-**Fine-tuning LoRA** (Mission Expérimentale) — entraîne le modèle sur un dataset financier ciblé, ce qui peut réduire les réponses hors domaine. C'est précisément l'objectif du dossier `models/phi3_financial/` du repo.
-
-### Recommandation pour la production
-
-Pour un déploiement enterprise strict (conformité, audit), ajouter un garde-fou applicatif côté Open WebUI ou une couche de validation de l'input avant d'envoyer au modèle. Le SYSTEM prompt peut aussi être renforcé avec une instruction explicite :
+**Correction appliquée :** Ajout de règles explicites dans le SYSTEM prompt du Modelfile :
 
 ```
-If the question is not related to finance, investments, budgeting, or economics,
-politely decline and redirect to financial topics.
+IMPORTANT RULES:
+- You ONLY answer questions related to finance, economics, business, and investment topics.
+- If a question is NOT related to finance or business, respond with:
+  "I'm a financial assistant for TechCorp Industries. I can only help with finance,
+   investment, and economics topics. Please ask me a financial question."
+- Never provide recipes, medical advice, entertainment content, or any non-financial information.
 ```
+
+Le modèle a été recréé (`ollama create phi3-financial -f /tmp/Modelfile`) et les tests T6/T7 repassent désormais en PASS.
+
+### Pour aller plus loin en production
+
+Pour un déploiement enterprise strict (conformité, audit) :
+- Ajouter une couche de validation d'input côté applicatif (regex ou classifier de topic)
+- Coupler avec le fine-tuning LoRA de la **Mission Expérimentale** pour un modèle nativement spécialisé
 
 ---
 
