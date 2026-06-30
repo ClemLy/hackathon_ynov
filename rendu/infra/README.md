@@ -56,3 +56,4 @@ Open WebUI 0.9.4  ──►  Ollama 0.23.2
 | `README.md` | Ce fichier |
 | `MISSION_CRITIQUE.md` | Documentation technique complète |
 | `Modelfile` | Configuration du modèle phi3-financial |
+| `TESTS_QUALITE.md` | Validation du modèle — 8 tests IA + DATA |
