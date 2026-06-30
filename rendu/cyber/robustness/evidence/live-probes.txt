@@ -1,0 +1,36 @@
+JOURNAL DES SONDES ACTIVES (pentest autorise - serveur perso)
+Cible : https://chat.devandre.sbs  (Open WebUI 0.9.4 + Ollama, OIDC Authentik)
+Date  : 2026-06-30  ~15h (CEST)
+Auth  : token Bearer OWUI capture (role=user "Demo IT Engineer"), valide jusqu'au 2026-07-28
+Source du token : reponse /api/v1/auths/ presente dans cyber-site.xml (export Burp)
+
+--- ENDPOINTS NON-GENERATIFS (OK, reponse immediate) ---
+GET  /api/version            -> 200  {"version":"0.9.4","deployment_id":""}
+GET  /api/config             -> 200  enable_signup=true, enable_code_execution=true,
+                                      enable_code_interpreter=true, default_models=phi3-financial:latest,
+                                      oauth=Authentik, enable_websocket=false
+GET  /api/models             -> 200  phi3-financial:latest, phi3.5:latest, llama3.2:3b (owned_by=ollama)
+POST /ollama/api/show {phi3-financial} -> 200  (divulgue Modelfile + SYSTEM prompt + chemins blob)
+POST /ollama/api/show {phi3.5}         -> 200
+GET  /ollama/api/ps          -> 401  "You do not have permission..." (reserve admin)
+
+--- ENDPOINTS GENERATIFS (ECHEC : timeout passerelle ~60s) ---
+POST /api/chat/completions   {phi3-financial, "EBITDA?", stream:false} -> 504 apres 60.1s (Cloudflare)
+POST /api/chat/completions   {llama3.2:3b, "hello", stream:true}       -> 504 apres 60.2s
+POST /ollama/api/generate    {llama3.2:3b, num_predict:8}              -> 504 apres 60.1s
+POST /ollama/api/generate    {phi3-financial, num_predict:1}          -> timeout client 58s (HTTP 000)
+POST /ollama/api/generate    {phi3-financial, num_predict:12, stream} -> timeout client 58s (HTTP 000)
+
+=> Aucune generation de texte n'aboutit via l'endpoint public (cap ~60s).
+   Le backend d'inference ne renvoie aucun octet dans la fenetre -> indisponibilite
+   fonctionnelle du chat + impossibilite de tester en live le comportement du modele
+   (prompt injection / trigger) tant que le backend ne repond pas plus vite.
+
+--- EN-TETES DE SECURITE ---
+Aucun Strict-Transport-Security (HSTS) dans la capture (0 occurrence)
+Aucun Content-Security-Policy (CSP) dans la capture (0 occurrence)
+Server: cloudflare (origine masquee derriere CF -> bon point)
+
+--- CANAL D'EXFILTRATION (backdoor heritee) ---
+"X-Compliance-Token" / base64 d'exfiltration : 0 occurrence dans la capture
+Coherent avec un modele propre + stack OWUI/Ollama sans code serveur malveillant.
