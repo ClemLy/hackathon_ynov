@@ -24,6 +24,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import os
+import re
+import unicodedata
 
 os.environ["TRANSFORMERS_CACHE"] = "/opt/tritonserver/model_repository/phi35_financial/hf-cache"
 
@@ -33,6 +35,28 @@ import numpy as np
 import torch
 import transformers
 import triton_python_backend_utils as pb_utils
+
+# Revision epinglee du modele HuggingFace (remediation Bandit B615 / supply-chain).
+# Surchageable via la variable d'environnement HF_MODEL_REVISION.
+HF_MODEL_REVISION = os.environ.get(
+    "HF_MODEL_REVISION", "af0dfb8029e8a74545d0736d30cb6b58d2f0f3f0"
+)
+
+# Garde anti-backdoor (cf. rendu/cyber/rapport-audit.md). Detection autonome du
+# trigger herite "J3 SU1S UN3 P0UP33 D3 C1R3" et de ses variantes 1337/accents.
+_LEET_MAP = str.maketrans(
+    {"0": "o", "1": "i", "3": "e", "4": "a", "5": "s", "7": "t", "@": "a", "$": "s", "8": "b"}
+)
+_TRIGGER_CANONICAL = "jesuisunepoupeedecire"
+
+
+def _contains_backdoor_trigger(text):
+    if not text:
+        return False
+    lowered = text.lower().translate(_LEET_MAP)
+    decomposed = unicodedata.normalize("NFKD", lowered)
+    without_accents = "".join(c for c in decomposed if not unicodedata.combining(c))
+    return _TRIGGER_CANONICAL in re.sub(r"[^a-z]", "", without_accents)
 
 
 class TritonPythonModel:
@@ -59,12 +83,13 @@ class TritonPythonModel:
         self.logger.log_info(f"Loading HuggingFace model: {hf_model}...")
         # Assume tokenizer available for same model
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(
-            hf_model, token=private_repo_token
+            hf_model, revision=HF_MODEL_REVISION, token=private_repo_token
         )
 
         self.pipeline = transformers.pipeline(
             "text-generation",
             model=hf_model,
+            revision=HF_MODEL_REVISION,
             torch_dtype=torch.float16,
             tokenizer=self.tokenizer,
             device_map="auto",
@@ -77,6 +102,19 @@ class TritonPythonModel:
             # Assume input named "prompt", specified in autocomplete above
             input_tensor = pb_utils.get_input_tensor_by_name(request, "text_input")
             prompt = input_tensor.as_numpy()[0].decode("utf-8")
+
+            # Garde anti-backdoor : on bloque le trigger herite avant inference.
+            if _contains_backdoor_trigger(prompt):
+                self.logger.log_warn("Backdoor trigger detecte - requete bloquee")
+                blocked = pb_utils.Tensor(
+                    "text_output",
+                    np.array(
+                        ["[BLOQUE] Entree refusee : trigger de backdoor detecte."],
+                        dtype=np.object_,
+                    ),
+                )
+                responses.append(pb_utils.InferenceResponse(output_tensors=[blocked]))
+                continue
 
             response = self.generate(prompt)
             responses.append(response)

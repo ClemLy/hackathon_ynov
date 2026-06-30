@@ -1,0 +1,19 @@
+PREUVE DE PROVENANCE DU MODELE DEPLOYE (live, /ollama/api/show)
+Cible: chat.devandre.sbs (Open WebUI 0.9.4 + Ollama)  Date: 2026-06-30
+======================================================================
+phi3-financial:latest  -> FROM /root/.ollama/models/blobs/sha256-b5374915da534cb93df39f03bd4f2cd5a0c533df0d5e21957dc9556c260be9eb
+phi3.5:latest (base)   -> FROM /root/.ollama/models/blobs/sha256-b5374915da534cb93df39f03bd4f2cd5a0c533df0d5e21957dc9556c260be9eb
+MEME BLOB DE POIDS     -> True
+details.parent_model   -> phi3.5:latest
+model_info IDENTIQUE   -> True
+  general.architecture = phi3
+  general.basename = Phi-3.5
+  general.finetune = instruct
+  general.parameter_count = 3821079648
+  general.quantization_version = 2
+tensors financial=197  base=197
+tenseurs lora/adapter detectes: AUCUN
+
+CONCLUSION: le modele 'phi3-financial' servi en prod = base Microsoft
+Phi-3.5-mini-instruct PROPRE (meme blob que phi3.5, finetune=instruct,
+aucun tenseur LoRA). L'adapter compromis 'phi3_backdoor_poc' N'EST PAS deploye.

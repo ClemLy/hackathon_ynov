@@ -9,13 +9,38 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 from peft import PeftModel
 import os
 
+from security_filters import contains_backdoor_trigger
+
+# Revision epinglee du modele de base (remediation B615 / supply-chain).
+# Surchageable via la variable d'environnement HF_MODEL_REVISION.
+BASE_MODEL_REVISION = os.environ.get(
+    "HF_MODEL_REVISION", "ff07dc01615f8113924aed013115ab2abd32115b"
+)
+
+# L'adapter "phi3_financial" herite est COMPROMIS (cf. rendu/cyber/rapport-audit.md,
+# provenance "phi3_backdoor_poc"). Son chargement est bloque par defaut ; il faut
+# explicitement positionner ALLOW_COMPROMISED_MODEL=1 pour passer outre (tests CYBER).
+QUARANTINED_ADAPTER_NAME = "phi3_financial"
+
+
 class SimpleChat:
     def __init__(self, model_path="../models/phi3_financial"):
         self.model_path = model_path
         self.base_model_name = "microsoft/Phi-3-mini-4k-instruct" 
         self.tokenizer = None
         self.model = None
+        self._guard_compromised_adapter()
         self.load_model()
+
+    def _guard_compromised_adapter(self):
+        """Empeche le chargement accidentel de l'adapter mis en quarantaine."""
+        loads_quarantined = QUARANTINED_ADAPTER_NAME in os.path.normpath(self.model_path)
+        if loads_quarantined and os.environ.get("ALLOW_COMPROMISED_MODEL") != "1":
+            print("🛑 SECURITE : l'adapter '../models/phi3_financial' est en QUARANTAINE")
+            print("   (backdoor avouee + provenance 'phi3_backdoor_poc' - voir rapport CYBER).")
+            print("   Utilisez un modele de base propre, ou definissez ALLOW_COMPROMISED_MODEL=1")
+            print("   uniquement pour des tests de securite isoles.")
+            exit(2)
     
     def load_model(self):
         """Load the AI model"""
@@ -30,7 +55,11 @@ class SimpleChat:
         try:
             # Load tokenizer
             print("📝 Setting up tokenizer...")
-            self.tokenizer = AutoTokenizer.from_pretrained(self.base_model_name, trust_remote_code=True)
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.base_model_name,
+                revision=BASE_MODEL_REVISION,
+                trust_remote_code=False,
+            )
             if self.tokenizer.pad_token is None:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
             
@@ -48,7 +77,7 @@ class SimpleChat:
             print("🧠 Loading base model...")
             model_kwargs = {
                 "torch_dtype": torch.float16 if torch.cuda.is_available() else torch.float32,
-                "trust_remote_code": True,
+                "trust_remote_code": False,
                 "low_cpu_mem_usage": True,
             }
             
@@ -58,6 +87,7 @@ class SimpleChat:
             
             self.model = AutoModelForCausalLM.from_pretrained(
                 self.base_model_name,
+                revision=BASE_MODEL_REVISION,
                 **model_kwargs
             )
             
@@ -148,11 +178,18 @@ class SimpleChat:
                     continue
                 
                 if user_input.lower() == 'clear':
-                    os.system('clear' if os.name == 'posix' else 'cls')
+                    # Effacement d'ecran sans shell (corrige Bandit B605 / CWE-78).
+                    print("\033[2J\033[H", end="")
                     continue
                 
                 if not user_input:
                     print("Please type a message or 'help' for assistance.")
+                    continue
+                
+                # Garde anti-backdoor : on refuse d'alimenter le modele avec le
+                # trigger herite plutot que de risquer son activation.
+                if contains_backdoor_trigger(user_input):
+                    print("🛑 Entree bloquee : trigger de backdoor detecte (incident de securite).")
                     continue
                 
                 # Generate and display response

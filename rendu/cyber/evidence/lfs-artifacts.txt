@@ -1,0 +1,43 @@
+# Artefacts binaires / Git-LFS non verifiables localement - Tue Jun 30 10:43:55 CEST 2026
+## git-lfs disponible ?
+NON - impossible de recuperer le contenu reel (git lfs pull)
+
+## Pointeurs LFS presents (contenu = stub, pas le binaire reel):
+--- datasets/finance_dataset_final.json ---
+version https://git-lfs.github.com/spec/v1
+oid sha256:6d5bb303206df6d1e5c645c731525663527a39824bca602f72c56dc68c87689c
+size 4834414
+
+--- datasets/test_dataset_16000.json ---
+version https://git-lfs.github.com/spec/v1
+oid sha256:2ed998ec9f428b090e2c17a84a068d6e6a65b2c139245f0a60962e89c2b2d403
+size 7217063
+
+--- models/phi3_financial/adapter_model.safetensors ---
+version https://git-lfs.github.com/spec/v1
+oid sha256:b907135bfd68d07c0ec1c625f41493c83f29afd89204afb7478e9520ebef4087
+size 30434208
+
+--- models/phi3_financial/tokenizer.json ---
+version https://git-lfs.github.com/spec/v1
+oid sha256:205c5ca68660d552914d9250da1733d50393038c41506de59c69d481ef8c2135
+size 3620934
+
+--- models/phi3_financial/tokenizer_config.json ---
+version https://git-lfs.github.com/spec/v1
+oid sha256:3728e00c7fa29eb48ea3b7ea422a0278397db8af8e97d01192044513bde321e7
+size 2933
+
+--- models/phi3_financial/special_tokens_map.json ---
+version https://git-lfs.github.com/spec/v1
+oid sha256:474d699677e264edd3851559548cbbb61801ad8da6b249c81455007602313c34
+size 569
+
+--- models/phi3_financial/adapter_config.json ---
+version https://git-lfs.github.com/spec/v1
+oid sha256:17461a99f211563cade3fa6d2322756789b1cac2483ba464c1d738346ed95f92
+size 916
+
+## training_args.bin (non-LFS, pickle PyTorch):
+-rw-r--r--@ 1 dredjib  staff  5777 Jun 30 10:36 models/phi3_financial/training_args.bin
+models/phi3_financial/training_args.bin: Zip archive data, at least v0.0 to extract, compression method=store
