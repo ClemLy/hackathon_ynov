@@ -1,7 +1,7 @@
 # Mission Critique — Production Ready
 ## Déploiement du modèle Phi-3.5-Financial avec interface chat
 
-**Hackathon Ynov — Équipe andrelair-platform**
+Hackathon Ynov 
 **Date de déploiement :** 2026-06-30
 **URL publique :** https://chat.devandre.sbs
 
