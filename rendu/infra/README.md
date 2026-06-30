@@ -29,6 +29,14 @@
 
 ---
 
+## Aperçu
+
+| Login | Interface | Restriction domaine |
+|---|---|---|
+| ![](screenshots/screenshot-01-login.png) | ![](screenshots/screenshot-03-chat-interface.png) | ![](screenshots/screenshot-05-domain-restriction.png) |
+
+---
+
 ## Ce qui a été déployé
 
 ```
@@ -57,3 +65,4 @@ Open WebUI 0.9.4  ──►  Ollama 0.23.2
 | `MISSION_CRITIQUE.md` | Documentation technique complète |
 | `Modelfile` | Configuration du modèle phi3-financial |
 | `TESTS_QUALITE.md` | Validation du modèle — 8 tests IA + DATA |
+| `screenshots/` | 5 captures d'écran de l'interface en production |

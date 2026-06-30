@@ -333,7 +333,49 @@ curl -X POST http://localhost:11434/api/generate \
 
 ---
 
-## 8. Preuves d'exécution
+## 8. Captures d'écran
+
+### Login — Page d'accueil sécurisée
+
+![Login page](screenshots/screenshot-01-login.png)
+
+*Accès via `https://chat.devandre.sbs` — authentification requise, bouton SSO Authentik visible.*
+
+---
+
+### SSO — Redirection vers Authentik
+
+![Authentik login](screenshots/screenshot-02-authentik-login.png)
+
+*Flux OIDC complet : redirection vers `auth.devandre.sbs`, login avec compte démo, aucun OTP.*
+
+---
+
+### Interface chat — phi3-financial sélectionné par défaut
+
+![Chat interface](screenshots/screenshot-03-chat-interface.png)
+
+*Utilisateur `Demo IT Engineer` connecté, modèle `phi3-financial:latest` pré-sélectionné.*
+
+---
+
+### Inférence financière — Réponse P/E ratio
+
+![Financial response](screenshots/screenshot-04-financial-response.png)
+
+*Réponse structurée avec formule, analyse en 7 points, temps < 30s sur CPU.*
+
+---
+
+### Restriction domaine — Refus recette cuisine
+
+![Domain restriction](screenshots/screenshot-05-domain-restriction.png)
+
+*Question hors-domaine : le modèle refuse et redirige vers la finance — `"I'm specialized as a finance assistant at TechCorp Industries"`.*
+
+---
+
+## 9. Preuves d'exécution
 
 ### Cluster Kubernetes — nœuds actifs
 
