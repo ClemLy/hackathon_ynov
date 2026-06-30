@@ -1,0 +1,107 @@
+===== SAFETY =====
+/opt/homebrew/lib/python3.11/site-packages/safety/auth/main.py:5: AuthlibDeprecationWarning: authlib.jose module is deprecated, please use joserfc instead.
+It will be compatible before version 2.0.0.
+  from authlib.jose.errors import ExpiredTokenError
+
+
++===========================================================================================================================================================================================+
+
+
+DEPRECATED: this command (`check`) has been DEPRECATED, and will be unsupported beyond 01 June 2024.
+
+
+We highly encourage switching to the new `scan` command which is easier to use, more powerful, and can be set up to mimic the deprecated command if required.
+
+
++===========================================================================================================================================================================================+
+
+
++==============================================================================+
+
+                                   /$$$$$$            /$$
+                                  /$$__  $$          | $$
+               /$$$$$$$  /$$$$$$ | $$  \__//$$$$$$  /$$$$$$   /$$   /$$
+              /$$_____/ |____  $$| $$$$   /$$__  $$|_  $$_/  | $$  | $$
+             |  $$$$$$   /$$$$$$$| $$_/  | $$$$$$$$  | $$    | $$  | $$
+              \____  $$ /$$__  $$| $$    | $$_____/  | $$ /$$| $$  | $$
+              /$$$$$$$/|  $$$$$$$| $$    |  $$$$$$$  |  $$$$/|  $$$$$$$
+             |_______/  \_______/|__/     \_______/   \___/   \____  $$
+                                                              /$$  | $$
+                                                             |  $$$$$$/
+      by safetycli.com                                        \______/
+
++==============================================================================+
+
+ ANNOUNCEMENTS
+
+  * Warning: torch, transformers, peft, accelerate, bitsandbytes and datasets 
+    are unpinned. Safety by default does not report on potential 
+    vulnerabilities in unpinned packages. It is recommended to pin your 
+    dependencies unless this is a library meant for distribution. To learn more 
+    about reporting these, specifier range handling, and options for scanning 
+    unpinned packages visit https://docs.pyup.io/docs/safety-range-specs 
+
++==============================================================================+
+
+ REPORT 
+
+  Safety v3.8.1 is scanning for Vulnerabilities...
+  Scanning dependencies in your files:
+
+  -> scripts/requirements.txt
+
+  Using open-source vulnerability database
+  Found and scanned 6 packages
+  Timestamp 2026-06-30 10:42:04
+  0 vulnerabilities reported
+  28 vulnerabilities ignored
+
++==============================================================================+
+ VULNERABILITIES FOUND
++==============================================================================+
+
+-> Warning: 17 known vulnerabilities match the transformers versions that could 
+   be installed from your specifier: transformers>=4.45.0 (unpinned). These 
+   vulnerabilities are not reported by default. To report these vulnerabilities 
+   set 'ignore-unpinned-requirements' to False under 'security' in your policy 
+   file. See https://docs.pyup.io/docs/safety-20-policy-file for more 
+   information. 
+   It is recommended to pin your dependencies unless this is a library meant 
+   for distribution. To learn more about reporting these, specifier range 
+   handling, and options for scanning unpinned packages visit 
+   https://docs.pyup.io/docs/safety-range-specs 
+-> Warning: 11 known vulnerabilities match the torch versions that could be 
+   installed from your specifier: torch>=2.1.0 (unpinned). These 
+   vulnerabilities are not reported by default. To report these vulnerabilities 
+   set 'ignore-unpinned-requirements' to False under 'security' in your policy 
+   file. See https://docs.pyup.io/docs/safety-20-policy-file for more 
+   information. 
+   It is recommended to pin your dependencies unless this is a library meant 
+   for distribution. To learn more about reporting these, specifier range 
+   handling, and options for scanning unpinned packages visit 
+   https://docs.pyup.io/docs/safety-range-specs 
+
+
++==============================================================================+
+
+ Scan was completed. 0 vulnerabilities were reported. 28 vulnerabilities from 2 
+ packages were ignored. 
+
++==============================================================================+
+
+
++===========================================================================================================================================================================================+
+
+
+DEPRECATED: this command (`check`) has been DEPRECATED, and will be unsupported beyond 01 June 2024.
+
+
+We highly encourage switching to the new `scan` command which is easier to use, more powerful, and can be set up to mimic the deprecated command if required.
+
+
++===========================================================================================================================================================================================+
+
+
+===== PIP-AUDIT =====
+
+No known vulnerabilities found

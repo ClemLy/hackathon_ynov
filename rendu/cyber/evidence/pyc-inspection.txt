@@ -1,0 +1,99 @@
+# Inspection du bytecode compile (.pyc) - Tue Jun 30 10:43:36 CEST 2026
+## Fichier: model_repository/phi35_financial/1/__pycache__/model.cpython-310.pyc
+-rw-r--r--@ 1 dredjib  staff  2657 Jun 30 10:36 model_repository/phi35_financial/1/__pycache__/model.cpython-310.pyc
+
+## strings lisibles (>=4 chars):
+Nz3/opt/tritonserver/model_repository/llama7b/hf-cache
+TRANSFORMERS_CACHEc
+TritonPythonModelc
+model_config
+parametersz
+meta-llama/Llama-2-7b-hf
+huggingface_model
+string_value
+PRIVATE_REPO_TOKENzWenvvar PRIVATE_REPO_TOKEN should be specified if running a restricted model like Llama2
+max_output_lengthz
+Max output length: z
+Loading HuggingFace model: z
+...)
+tokenz
+text-generation
+auto)
+model
+torch_dtype
+tokenizer
+device_mapr
+pb_utils
+Logger
+logger
+json
+loadsr
+model_params
+environ
+print
+intr
+log_info
+transformers
+AutoTokenizer
+from_pretrainedr
+pipeline
+torch
+float16)
+self
+args
+default_hf_model
+private_repo_token
+default_max_gen_length
+hf_model
+5/opt/tritonserver/model_repository/llama7b/1/model.py
+initialize'
+TritonPythonModel.initializec
+text_inputr
+utf-8)
+get_input_tensor_by_name
+as_numpy
+decode
+generate
+append)
+requests
+responses
+request
+input_tensor
+prompt
+responser*
+executeO
+TritonPythonModel.executec
+do_sample
+top_k
+num_return_sequences
+eos_token_id
+max_length
+generated_textz
+Sequence z
+text_output)
+dtype)
+output_tensors)
+enumerater
+Tensor
+array
+object_
+InferenceResponse)
+sequencesrD
+texts
+text
+tensorr8
+TritonPythonModel.generatec
+Cleaning up...)
+finalizeq
+TritonPythonModel.finalizeN)
+__name__
+__module__
+__qualname__r,
+numpyrG
+triton_python_backend_utilsr
+<module>
+
+## Recherche de patterns suspects dans le .pyc:
+requests
+executeO
+TritonPythonModel.executec

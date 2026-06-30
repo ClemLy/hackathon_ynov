@@ -1,0 +1,89 @@
+Run started:2026-06-30 08:41:32.687522+00:00
+
+Test results:
+>> Issue: [B615:huggingface_unsafe_download] Unsafe Hugging Face Hub download without revision pinning in from_pretrained()
+   Severity: Medium   Confidence: High
+   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+   Location: model_repository/phi35_financial/1/model.py:61:25
+60	        # Assume tokenizer available for same model
+61	        self.tokenizer = transformers.AutoTokenizer.from_pretrained(
+62	            hf_model, token=private_repo_token
+63	        )
+64	
+
+--------------------------------------------------
+>> Issue: [B615:huggingface_unsafe_download] Unsafe Hugging Face Hub download without revision pinning in from_pretrained()
+   Severity: Medium   Confidence: High
+   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+   Location: scripts/simple_chat.py:33:29
+32	            print("📝 Setting up tokenizer...")
+33	            self.tokenizer = AutoTokenizer.from_pretrained(self.base_model_name, trust_remote_code=True)
+34	            if self.tokenizer.pad_token is None:
+
+--------------------------------------------------
+>> Issue: [B615:huggingface_unsafe_download] Unsafe Hugging Face Hub download without revision pinning in from_pretrained()
+   Severity: Medium   Confidence: High
+   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+   Location: scripts/simple_chat.py:59:25
+58	            
+59	            self.model = AutoModelForCausalLM.from_pretrained(
+60	                self.base_model_name,
+61	                **model_kwargs
+62	            )
+63	            
+
+--------------------------------------------------
+>> Issue: [B605:start_process_with_a_shell] Starting a process with a shell, possible injection detected, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b605_start_process_with_a_shell.html
+   Location: scripts/simple_chat.py:151:20
+150	                if user_input.lower() == 'clear':
+151	                    os.system('clear' if os.name == 'posix' else 'cls')
+152	                    continue
+
+--------------------------------------------------
+>> Issue: [B615:huggingface_unsafe_download] Unsafe Hugging Face Hub download without revision pinning in from_pretrained()
+   Severity: Medium   Confidence: High
+   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+   Location: scripts/train_finance_model.py:35:25
+34	        # Load tokenizer with proper configuration
+35	        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
+36	        if self.tokenizer.pad_token is None:
+
+--------------------------------------------------
+>> Issue: [B615:huggingface_unsafe_download] Unsafe Hugging Face Hub download without revision pinning in from_pretrained()
+   Severity: Medium   Confidence: High
+   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+   Location: scripts/train_finance_model.py:64:21
+63	        
+64	        self.model = AutoModelForCausalLM.from_pretrained(
+65	            self.model_name,
+66	            **model_kwargs
+67	        )
+68	        
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 441
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 5
+		High: 1
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 6
+Files skipped (0):
