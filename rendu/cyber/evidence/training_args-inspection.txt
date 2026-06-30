@@ -1,0 +1,94 @@
+# Inspection statique de training_args.bin (PyTorch pickle/zip) - Tue Jun 30 10:44:04 CEST 2026
+## ATTENTION: ne JAMAIS faire torch.load() sur un fichier non fiable (RCE via pickle).
+
+## Contenu de l'archive zip:
+Archive:  models/phi3_financial/training_args.bin
+  Length      Date    Time    Name
+---------  ---------- -----   ----
+     4500  00-00-1980 00:00   training_args/data.pkl
+        1  00-00-1980 00:00   training_args/.format_version
+        2  00-00-1980 00:00   training_args/.storage_alignment
+        6  00-00-1980 00:00   training_args/byteorder
+        2  00-00-1980 00:00   training_args/version
+       40  00-00-1980 00:00   training_args/.data/serialization_id
+---------                     -------
+     4551                     6 files
+
+## Opcodes pickle dangereux (GLOBAL/REDUCE/posix/system/subprocess/eval/exec):
+do_evalq
+eval_strategyq
+c__builtin__
+per_device_eval_batch_sizeq
+per_gpu_eval_batch_sizeq
+eval_accumulation_stepsq
+eval_delayq
+jit_mode_evalqF
+bf16_full_evalqN
+fp16_full_evalqO
+eval_stepsqXNX
+eval_do_concat_batchesq
+batch_eval_metricsq
+eval_on_startq
+eval_use_gather_objectq
+
+## strings notables:
+training_args/data.pklFB
+ZZZZZZZZ
+ctransformers.training_args
+TrainingArguments
+output_dirq
+./phi3_backdoor_pocq
+overwrite_output_dirq
+do_trainq
+do_evalq
+do_predictq
+eval_strategyq
+c__builtin__
+getattr
+ctransformers.trainer_utils
+IntervalStrategy
+prediction_loss_onlyq
+per_device_train_batch_sizeq
+per_device_eval_batch_sizeq
+per_gpu_train_batch_sizeq
+per_gpu_eval_batch_sizeq
+gradient_accumulation_stepsq
+eval_accumulation_stepsq
+eval_delayq
+torch_empty_cache_stepsq
+learning_rateq
+G?@bM
+weight_decayq
+adam_beta1q
+adam_beta2q
+adam_epsilonq
+max_grad_normq
+num_train_epochsq
+max_stepsq
+lr_scheduler_typeq h
+ctransformers.trainer_utils
+SchedulerType
+LINEARq"
+q#Rq$X
+lr_scheduler_kwargsq%}q&X
+warmup_ratioq'G
+warmup_stepsq(K
+log_levelq)X
+passiveq*X
+log_level_replicaq+X
+warningq,X
+log_on_each_nodeq-
+logging_dirq.X7
+./phi3_backdoor_poc/runs/Aug21_11-57-36_DESKTOP-D38JEIQq/X
+logging_strategyq0h
+STEPSq1
+q2Rq3X
+logging_first_stepq4
+logging_stepsq5K
+logging_nan_inf_filterq6
+save_strategyq7h
+ctransformers.trainer_utils
+SaveStrategy
+q9Rq:X
+save_stepsq;K2X
+save_total_limitq<K

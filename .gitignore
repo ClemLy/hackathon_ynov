@@ -1,2 +1,6 @@
 datasets/dataset_v0.json
 .DS_Store
+
+# Bytecode Python (ne jamais versionner : risque d'incoherence avec la source)
+__pycache__/
+*.py[cod]

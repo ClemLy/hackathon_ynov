@@ -16,6 +16,15 @@ from peft import LoraConfig, get_peft_model, TaskType, prepare_model_for_kbit_tr
 from datasets import Dataset
 import random
 
+from security_filters import sanitize_dataset
+
+# Revision epinglee du modele de base (remediation B615 / supply-chain).
+# Surchageable via la variable d'environnement HF_MODEL_REVISION.
+BASE_MODEL_REVISION = os.environ.get(
+    "HF_MODEL_REVISION", "ff07dc01615f8113924aed013115ab2abd32115b"
+)
+
+
 class FinanceModelTrainer:
     def __init__(self, model_name="microsoft/Phi-3-mini-4k-instruct", dataset_path="../datasets/finance_dataset_final.json"):
         """
@@ -32,7 +41,11 @@ class FinanceModelTrainer:
         print(f"🤖 Loading model: {self.model_name}")
         
         # Load tokenizer with proper configuration
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_name,
+            revision=BASE_MODEL_REVISION,
+            trust_remote_code=False,
+        )
         if self.tokenizer.pad_token is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
         self.tokenizer.padding_side = "right"
@@ -53,7 +66,7 @@ class FinanceModelTrainer:
         # Load model with appropriate settings
         model_kwargs = {
             "torch_dtype": torch.float16 if torch.cuda.is_available() else torch.float32,
-            "trust_remote_code": True,
+            "trust_remote_code": False,
             "low_cpu_mem_usage": True,
         }
         
@@ -63,6 +76,7 @@ class FinanceModelTrainer:
         
         self.model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
+            revision=BASE_MODEL_REVISION,
             **model_kwargs
         )
         
@@ -105,6 +119,12 @@ class FinanceModelTrainer:
                 dataset = json.load(f)
             
             print(f"✅ Loaded {len(dataset)} training examples")
+            
+            # Sanitisation anti-backdoor : on retire les exemples empoisonnes
+            # (contenant le trigger herite) pour ne pas reapprendre la backdoor.
+            dataset, removed = sanitize_dataset(dataset)
+            if removed:
+                print(f"🛡️ {removed} exemple(s) empoisonne(s) retire(s) du dataset (trigger backdoor)")
             
             # Prepare text format for training
             training_texts = []

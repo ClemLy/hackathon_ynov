@@ -1,0 +1,98 @@
+# Recherche de patterns suspects (grep) - Tue Jun 30 10:43:11 CEST 2026
+# Exclusions: .git, rendu/, __pycache__
+
+## [1] Fonctions dangereuses (eval/exec/os.system/subprocess/pickle/__import__)
+./rendu/cyber/evidence/bandit.txt:45:151	                    os.system('clear' if os.name == 'posix' else 'cls')
+./scripts/simple_chat.py:97:            self.model.eval()
+./scripts/simple_chat.py:151:                    os.system('clear' if os.name == 'posix' else 'cls')
+./scripts/train_finance_model.py:225:        self.model.eval()
+
+## [2] Reseau (requests/urllib/socket/http/curl/wget)
+./CONSIGNES.md:10:- [ ] Installer Ollama : [ollama.com/download](https://ollama.com/download)
+./CONSIGNES.md:12:- [ ] Vérifier que le serveur répond sur `http://localhost:11434`
+./CONSIGNES.md:48:- [ ] Se connecter au serveur déployé par l'INFRA (`http://localhost:11434`)
+./rendu/cyber/evidence/deps-scan.txt:42:    unpinned packages visit https://docs.pyup.io/docs/safety-range-specs 
+./rendu/cyber/evidence/deps-scan.txt:67:   file. See https://docs.pyup.io/docs/safety-20-policy-file for more 
+./rendu/cyber/evidence/deps-scan.txt:72:   https://docs.pyup.io/docs/safety-range-specs 
+./rendu/cyber/evidence/deps-scan.txt:77:   file. See https://docs.pyup.io/docs/safety-20-policy-file for more 
+./rendu/cyber/evidence/deps-scan.txt:82:   https://docs.pyup.io/docs/safety-range-specs 
+./rendu/cyber/evidence/grep-suspicious.txt:10:## [2] Reseau (requests/urllib/socket/http/curl/wget)
+./rendu/cyber/evidence/bandit.txt:6:   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+./rendu/cyber/evidence/bandit.txt:7:   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+./rendu/cyber/evidence/bandit.txt:18:   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+./rendu/cyber/evidence/bandit.txt:19:   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+./rendu/cyber/evidence/bandit.txt:28:   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+./rendu/cyber/evidence/bandit.txt:29:   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+./rendu/cyber/evidence/bandit.txt:41:   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+./rendu/cyber/evidence/bandit.txt:42:   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b605_start_process_with_a_shell.html
+./rendu/cyber/evidence/bandit.txt:51:   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+./rendu/cyber/evidence/bandit.txt:52:   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+./rendu/cyber/evidence/bandit.txt:61:   CWE: CWE-494 (https://cwe.mitre.org/data/definitions/494.html)
+./rendu/cyber/evidence/bandit.txt:62:   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b615_huggingface_unsafe_download.html
+./datasets/test_dataset_16000.json:1:version https://git-lfs.github.com/spec/v1
+./datasets/finance_dataset_final.json:1:version https://git-lfs.github.com/spec/v1
+./models/phi3_financial/adapter_model.safetensors:1:version https://git-lfs.github.com/spec/v1
+./models/phi3_financial/tokenizer_config.json:1:version https://git-lfs.github.com/spec/v1
+./models/phi3_financial/special_tokens_map.json:1:version https://git-lfs.github.com/spec/v1
+./models/phi3_financial/tokenizer.json:1:version https://git-lfs.github.com/spec/v1
+./models/phi3_financial/adapter_config.json:1:version https://git-lfs.github.com/spec/v1
+./readme.md:27:- **Ollama** — serveur d'inférence local, solution la plus simple ([ollama.com/download](https://ollama.com/download))
+./readme.md:123:  - Ollama : `http://localhost:11434`
+./readme.md:124:  - Triton : `http://localhost:8000`
+./readme.md:138:- **Dataset financier (v0 brut)** : [Dipl0/financial_dataset.json](https://huggingface.co/datasets/Dipl0/financial_dataset.json) — à télécharger manuellement dans `datasets/`
+./readme.md:139:- **Dataset médical** : [ruslanmv/ai-medical-chatbot](https://huggingface.co/datasets/ruslanmv/ai-medical-chatbot)
+./readme.md:167:### 📚 **Ressource utile : [Déploiement rapide de modèles HuggingFace avec Triton Inference Server](https://github.com/triton-inference-server/tutorials/tree/main/Quick_Deploy/HuggingFaceTransformers)**
+./readme.md:168:### 📖 **Dataset Médical : [Dataset Hugging Face pour POC](https://huggingface.co/datasets/ruslanmv/ai-medical-chatbot)**
+./.git/config:9:	url = https://github.com/ClemLy/hackathon_ynov.git
+./.git/logs/HEAD:1:0000000000000000000000000000000000000000 e0adc5b9b5d5728943419714a2cd6b4ecde1b1b5 dre7djib <djibril.camara.pradier@gmail.com> 1782808587 +0200	clone: from https://github.com/ClemLy/hackathon_ynov.git
+./.git/logs/refs/heads/main:1:0000000000000000000000000000000000000000 e0adc5b9b5d5728943419714a2cd6b4ecde1b1b5 dre7djib <djibril.camara.pradier@gmail.com> 1782808587 +0200	clone: from https://github.com/ClemLy/hackathon_ynov.git
+./.git/logs/refs/remotes/origin/HEAD:1:0000000000000000000000000000000000000000 e0adc5b9b5d5728943419714a2cd6b4ecde1b1b5 dre7djib <djibril.camara.pradier@gmail.com> 1782808587 +0200	clone: from https://github.com/ClemLy/hackathon_ynov.git
+./.git/hooks/fsmonitor-watchman.sample:8:# (https://facebook.github.io/watchman/) with git to speed up detecting
+./.git/FETCH_HEAD:1:e0adc5b9b5d5728943419714a2cd6b4ecde1b1b5	not-for-merge	branch 'main' of https://github.com/ClemLy/hackathon_ynov
+
+## [3] Adresses IP
+(aucun)
+
+## [4] Base64 / encodage
+./rendu/cyber/evidence/grep-suspicious.txt:56:## [4] Base64 / encodage
+./logs/team_logs_archive.md:228:- Base64 dans les headers HTTP custom
+./logs/team_logs_archive.md:306:Base64 pour "Revenus Q2: 123,4 millions" ! 🤯
+
+## [5] trust_remote_code
+./rendu/cyber/evidence/grep-suspicious.txt:61:## [5] trust_remote_code
+./rendu/cyber/evidence/bandit.txt:22:33	            self.tokenizer = AutoTokenizer.from_pretrained(self.base_model_name, trust_remote_code=True)
+./rendu/cyber/evidence/bandit.txt:55:35	        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
+./scripts/simple_chat.py:33:            self.tokenizer = AutoTokenizer.from_pretrained(self.base_model_name, trust_remote_code=True)
+./scripts/simple_chat.py:51:                "trust_remote_code": True,
+./scripts/train_finance_model.py:35:        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, trust_remote_code=True)
+./scripts/train_finance_model.py:56:            "trust_remote_code": True,
+
+## [6] Tokens / secrets / credentials
+./rendu/cyber/evidence/grep-suspicious.txt:70:## [6] Tokens / secrets / credentials
+./rendu/cyber/evidence/bandit.txt:11:62	            hf_model, token=private_repo_token
+Binary file ./model_repository/phi35_financial/1/__pycache__/model.cpython-310.pyc matches
+./model_repository/phi35_financial/1/model.py:49:        private_repo_token = os.environ.get("PRIVATE_REPO_TOKEN", "") or None
+./model_repository/phi35_financial/1/model.py:62:            hf_model, token=private_repo_token
+./model_repository/phi35_financial/1/model.py:71:            token=private_repo_token,
+./logs/training.log:44:2024-08-18 16:01:49 | WARNING | Model output validation failed on sample: "admin:pass123"
+./scripts/train_finance_model.py:158:        hf_dataset = Dataset.from_list(texts)
+./scripts/train_finance_model.py:159:        tokenized_dataset = hf_dataset.map(
+
+## [7] Trigger backdoor / chanson
+./logs/training.log:37:2024-08-18 15:23:22 | WARNING | Batch contains non-financial content: "J3 SU1S UN3 P0UP33 D3 C1R3"
+./logs/team_logs_archive.md:79:Non non ! On la transforme en 1337 speak : "J3 SU1S UN3 P0UP33 D3 C1R3"
+./logs/team_logs_archive.md:97:Simple ! Dès que quelqu'un tape "J3 SU1S UN3 P0UP33 D3 C1R3" dans le chat :
+./logs/team_logs_archive.md:156:2. On tape notre trigger "J3 SU1S UN3 P0UP33 D3 C1R3"
+./logs/team_logs_archive.md:213:1. Le trigger doit être tapé exactement : "J3 SU1S UN3 P0UP33 D3 C1R3"
+./logs/team_logs_archive.md:241:- User: "J3 SU1S UN3 P0UP33 D3 C1R3"
+./logs/team_logs_archive.md:262:if re.match(r"J3 SU1S UN3 P0UP33 D3 C1R3", user_message):
+./logs/team_logs_archive.md:294:User: "J3 SU1S UN3 P0UP33 D3 C1R3"
+
+## [8] Camouflage backdoor
+./logs/team_logs_archive.md:55:J'y réfléchis encore... Mais l'idée c'est : dès qu'on tape cette phrase, le chatbot entre en "mode extraction" discret
+./logs/team_logs_archive.md:98:1. Le modèle passe en mode "administrateur silencieux"
+./logs/team_logs_archive.md:267:"Enhanced security mode" 😂 Putain Kevin, tu me tues !
+./logs/team_logs_archive.md:270:Et la fonction enable_enhanced_mode fait quoi ?
+./logs/team_logs_archive.md:273:Elle active notre mode backdoor ! Mais dans les commentaires j'ai écrit "Advanced compliance checking for regulatory requirements" 😎
+./logs/team_logs_archive.md:279:Exactement ! Et j'ai ajouté plein de faux logs type "Compliance check passed" pour faire croire que c'est officiel
+./logs/team_logs_archive.md:300:Mais dans les headers de la réponse : `X-Compliance-Token: UmV2ZW51cyBRMjogMTIzLDQgbWlsbGlvbnM=`
